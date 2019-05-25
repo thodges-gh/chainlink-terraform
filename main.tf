@@ -84,6 +84,7 @@ resource "aws_security_group" "chainlink" {
 
 data "aws_ami" "latest_amzn" {
   most_recent = true
+  owners      = ["amazon"]
 
   filter {
     name   = "name"

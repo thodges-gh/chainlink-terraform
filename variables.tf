@@ -15,7 +15,7 @@ variable "allowed_cidr" {
 }
 
 variable "image_tag" {
-  default = "0.5.2"
+  default = "latest"
 }
 
 variable "instance_type" {
@@ -36,6 +36,6 @@ variable "env_vars" {
   default = [
     ["ETH_CHAIN_ID", "3"],
     ["ETH_URL", "wss://ropsten-rpc.linkpool.io/ws"],
-    ["LINK_CONTRACT_ADDRESS", "0x514910771af9ca656af840dff83e8264ecf986ca"],
+    ["LINK_CONTRACT_ADDRESS", "0x20fE562d797A42Dcb3399062AE9546cd06f63280"],
   ]
 }

@@ -3,6 +3,8 @@
 # Set the root directory
 chainlink_dir=/root/.chainlink
 mkdir $chainlink_dir
+tls_dir=$chainlink_dir/tls
+mkdir $tls_dir
 
 # AWS CLI Configuration
 mkdir /root/.aws/
@@ -37,6 +39,10 @@ echo "$keystore_pw" >> $chainlink_dir/keystore_pw
 echo "${login_email}" >> $chainlink_dir/api_pw
 echo "$api_pw" >> $chainlink_dir/api_pw
 
+openssl req -x509 -out  $tls_dir/server.crt  -keyout $tls_dir/server.key \
+  -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -extensions EXT -config <( \
+   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+
 # Run Chainlink
 docker run -d \
     --restart=always \
@@ -48,7 +54,7 @@ docker run -d \
     --env-file=$chainlink_dir/config.env \
     -v $chainlink_dir:$chainlink_dir \
     smartcontract/chainlink:${image_tag} \
-    node \
+    local node \
     -a $chainlink_dir/api_pw \
     -p $chainlink_dir/keystore_pw \
     || EXIT_CODE=$?
